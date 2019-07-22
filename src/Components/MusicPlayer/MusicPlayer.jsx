@@ -27,7 +27,7 @@ class MusicPlayer extends Component {
             positionSliderValue: 50,
             volumeSliderValue: 50,
             positionStamp: '00:00',
-            durationStamp: '00:00',
+            //durationStamp: '00:00',
             player_init_error: false
         };
 
@@ -139,9 +139,11 @@ class MusicPlayer extends Component {
                 let durationStamp = this.milisToMinutesAndSeconds(
                     state.duration
                 );
-                this.setState({ positionStamp, durationStamp });
-                this.props.setPozitionStamp(positionStamp)
                 
+                this.setState({ positionStamp, durationStamp });
+                this.props.setPozitionStamp(state.position);
+                this.props.setDurationStamps(state.duration)
+                console.log(state.duration)
             }
         });
     };
@@ -399,7 +401,8 @@ const mapStateToProps = state => {
         playNow: state.play_now,
         currentlyPlaying: state.currently_playing,
         isPlaying: state.isPlaying,
-        pozition_stamp: state.pozition_stamp
+        pozition_stamp: state.pozition_stamp,
+        durationStamps: state.durationStamps
     };
 };
 
@@ -411,7 +414,9 @@ const mapDispatchToProps = dispatch => {
         setIsPlaying: isPlaying =>
             dispatch({ type: actionTypes.SET_IS_PLAYING, isPlaying }),
         setPozitionStamp: pozition_stamp =>
-            dispatch({type: actionTypes.NOW_POZITION_STAMP,pozition_stamp})
+            dispatch({type: actionTypes.NOW_POZITION_STAMP,pozition_stamp}),
+        setDurationStamps: durationStamps =>
+            dispatch({type: actionTypes.DURATION_STAMP, durationStamps})
     };
 };
 

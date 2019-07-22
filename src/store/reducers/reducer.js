@@ -10,6 +10,8 @@ const initialState = {
     currently_playing: null,
     isPlaying: false,
     pozition_stamp: null,
+    durationStamps:'00:00',
+
     backgroundImage: "linear-gradient(rgb(58, 91, 95), rgb(6, 9, 10) 85%)"
 };
 
@@ -66,6 +68,11 @@ const reducer = (state = initialState, action) => {
             return{
                 ...state,
                 pozition_stamp: action.pozition_stamp
+            }
+        case actionTypes.DURATION_STAMP:
+            return{
+                ...state,
+                durationStamps: action.durationStamps
             }
         default:
             return state;

@@ -11,7 +11,8 @@ export const SET_BACKGROUND_IMAGE = "SET_BACKGROUND_IMAGE";
 export const PLAY_SONG_START = "PLAY_SONG_START";
 export const PLAY_SONG_SUCCESS = "PLAY_SONG_SUCCESS";
 export const PLAY_SONG_FAIL = "PLAY_SONG_FAIL";
-export const NOW_POZITION_STAMP ='NOW_POZITION_STAMP'
+export const NOW_POZITION_STAMP ='NOW_POZITION_STAMP';
+export const DURATION_STAMP ='DURATION_STAMP';
 
 export const playSong = (uris, deviceId) => {
     return (dispatch, getState) => {

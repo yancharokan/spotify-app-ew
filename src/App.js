@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import Layout from './Containers/Layout/Layout';
 import { MuiThemeProvider, createMuiTheme } from '@material-ui/core/styles';
 import CssBaseline from '@material-ui/core/CssBaseline/CssBaseline';
+import Editor from './Components/Editor/Editor'
 
 class App extends Component {
     render() {
@@ -28,6 +29,8 @@ class App extends Component {
         });
 
         return (
+            <div>
+            <Editor/>
             <MuiThemeProvider theme={theme}>
                 <CssBaseline>
                     <Layout
@@ -38,6 +41,7 @@ class App extends Component {
                     />
                 </CssBaseline>
             </MuiThemeProvider>
+            </div>
         );
     }
 }

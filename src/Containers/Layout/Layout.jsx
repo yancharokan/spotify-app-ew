@@ -8,6 +8,7 @@ import * as actionTypes from '../../store/actions/actionTypes';
 //import HomePage from '../../Components/HomePage/HomePage';
 import MusicPlayer from '../../Components/MusicPlayer/MusicPlayer';
 import Login from '../../Components/Login/Login';
+
 //import Sidedrawer from '../../Components/Sidedrawer/Sidedrawer';
 //import PlaylistView from '../../Components/PlaylistView/PlaylistView';
 import { withWidth } from '@material-ui/core';
@@ -155,9 +156,11 @@ class Layout extends Component {
     */
     return this.props.user ? (
       <React.Fragment>
+        
         <SpotifyApiContext.Provider value={this.props.user.access_token}>
           
           <MusicPlayer /> 
+          
         </SpotifyApiContext.Provider>
       </React.Fragment>
     ) : (
