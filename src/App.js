@@ -30,7 +30,7 @@ class App extends Component {
 
         return (
             <div>
-            <Editor/>
+      
             <MuiThemeProvider theme={theme}>
                 <CssBaseline>
                     <Layout

@@ -26,9 +26,11 @@ class Editor extends Component{
         super(props);
         this.state={
             saniye:0,
-            selectedIndex:0
+            selectedIndex:0,
+            secenek:0
             
         }
+        
     }
 
     createTable = sefer => {
@@ -59,14 +61,12 @@ class Editor extends Component{
     render(){
         let toplamsure=this.milisToMinutesAndSeconds(this.props.durationStamps)
         let oAnlıkSure=this.milisToMinutesAndSeconds(this.props.pozition_stamp)
-        let mainContent=(toplamsure? toplamsure:0);
+        //let mainContent=(toplamsure? toplamsure:0);
          
         return(
         <div>
-        {mainContent},
-        <div>{oAnlıkSure}</div>
         <SandboxComponent>
-          <Tabs height='medium' flex="shrink" alignSelf='center' activeIndex={oAnlıkSure} onActive={i=>this.state.setPozitionStamp(i)}>
+          <Tabs height='medium' flex="shrink" alignSelf='center' activeIndex={oAnlıkSure} onActive={i=>this.props.zamanagit("e",(1-(toplamsure-i)/toplamsure)*100)}>
             {this.createTable(toplamsure)}
           </Tabs>
         </SandboxComponent>

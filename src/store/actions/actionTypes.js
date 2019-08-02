@@ -14,6 +14,8 @@ export const PLAY_SONG_FAIL = "PLAY_SONG_FAIL";
 export const NOW_POZITION_STAMP ='NOW_POZITION_STAMP';
 export const DURATION_STAMP ='DURATION_STAMP';
 
+
+
 export const playSong = (uris, deviceId) => {
     return (dispatch, getState) => {
         if (getState().current_user) {

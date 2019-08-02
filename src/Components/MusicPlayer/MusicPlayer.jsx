@@ -15,6 +15,8 @@ import PauseIcon from '@material-ui/icons/Pause';
 import PlayArrowIcon from '@material-ui/icons/PlayArrow';
 import Slider from '@material-ui/lab/Slider';
 import { TrackDetailsLink } from '../UI/TrackDetailsLink';
+import Editor from '../Editor/Editor';
+
 
 class MusicPlayer extends Component {
     constructor(props) {
@@ -186,12 +188,14 @@ class MusicPlayer extends Component {
         this.player.nextTrack();
     };
 
-    onSeekSliderChange = (e, val) => {
+    onSeekSliderChange = (e,val) => {
         // duration = 100%
         // ? = val%
         let dur = this.state.playingInfo.duration;
         let seek = Math.floor((val * dur) / 100); // round number
         this.setState({ positionSliderValue: val });
+        console.log('valu değeri  '+val)
+        console.log("e değeri:  " +  e)
         this.player.seek(seek).then(() => {
             console.log(`Seek song to ${seek} ms`);
             
@@ -242,6 +246,7 @@ class MusicPlayer extends Component {
 
         if (this.player && this.state.playingInfo) {
             mainContent = (
+                
                 <Card style={{ position: 'fixed', bottom: 0, width: '100%' }}>
                     <Grid
                         container
@@ -389,7 +394,10 @@ class MusicPlayer extends Component {
         }
         return (
             // <Grid container style={containerStyle}>
-            <div>{mainContent}</div>
+
+            <div>
+            <div><Editor  zamanagit={this.onSeekSliderChange}/></div>
+            {mainContent}</div>
             // </Grid>
         );
     }

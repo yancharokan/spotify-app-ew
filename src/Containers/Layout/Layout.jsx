@@ -12,6 +12,11 @@ import Login from '../../Components/Login/Login';
 //import Sidedrawer from '../../Components/Sidedrawer/Sidedrawer';
 //import PlaylistView from '../../Components/PlaylistView/PlaylistView';
 import { withWidth } from '@material-ui/core';
+
+//grommit
+
+//import SandboxComponent from './SandboxComponent';
+
 //import Search from '../../Components/Search/Search';
 //import NotFound from '../../Components/NotFound/NotFound';
 //import AlbumView from '../../Components/AlbumView/AlbumView';
@@ -155,18 +160,24 @@ class Layout extends Component {
       );
     */
     return this.props.user ? (
-      <React.Fragment>
+      
+
+
+          <React.Fragment>
         
-        <SpotifyApiContext.Provider value={this.props.user.access_token}>
+            <SpotifyApiContext.Provider value={this.props.user.access_token}>
+
+              <MusicPlayer /> 
+
           
-          <MusicPlayer /> 
-          
-        </SpotifyApiContext.Provider>
-      </React.Fragment>
+            </SpotifyApiContext.Provider>
+          </React.Fragment>
+      
     ) : (
       <Switch>
         <Route component={Login} />
       </Switch>
+      
     );
   }
 }
