@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import * as actionTypes from '../../store/actions/actionTypes';
+import CssBaseline from '@material-ui/core/CssBaseline/CssBaseline';
 import {
     Grid,
     Typography,
@@ -16,6 +17,8 @@ import PlayArrowIcon from '@material-ui/icons/PlayArrow';
 import Slider from '@material-ui/lab/Slider';
 import { TrackDetailsLink } from '../UI/TrackDetailsLink';
 import Editor from '../Editor/Editor';
+
+
 
 
 class MusicPlayer extends Component {
@@ -214,7 +217,11 @@ class MusicPlayer extends Component {
         return minutes + ':' + (seconds < 10 ? '0' : '') + seconds;
     };
 
+    
+
     render() {
+
+
         let mainContent = (
             <Card
                 style={{
@@ -397,7 +404,13 @@ class MusicPlayer extends Component {
 
             <div>
             <div><Editor  zamanagit={this.onSeekSliderChange}/></div>
-            {mainContent}</div>
+
+            
+            <CssBaseline>
+            {mainContent }
+            </CssBaseline>
+            
+            </div>
             // </Grid>
         );
     }
