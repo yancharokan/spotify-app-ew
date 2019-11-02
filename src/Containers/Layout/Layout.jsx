@@ -2,65 +2,14 @@ import React, { Component } from 'react';
 import { Switch, Route, withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { SpotifyApiContext } from 'react-spotify-api';
-//import styled from 'styled-components';
 import axios from 'axios';
 import * as actionTypes from '../../store/actions/actionTypes';
-//import HomePage from '../../Components/HomePage/HomePage';
 import MusicPlayer from '../../Components/MusicPlayer/MusicPlayer';
 import Login from '../../Components/Login/Login';
 
-//import Sidedrawer from '../../Components/Sidedrawer/Sidedrawer';
-//import PlaylistView from '../../Components/PlaylistView/PlaylistView';
 import { withWidth } from '@material-ui/core';
 
 
-
-
-
-//import Search from '../../Components/Search/Search';
-//import NotFound from '../../Components/NotFound/NotFound';
-//import AlbumView from '../../Components/AlbumView/AlbumView';
-//import Library from '../../Components/Library/Library';
-//import ArtistView from '../../Components/ArtistView/ArtistView';
-//import GenreView from '../../Components/GenreView/GenreView';
-
-// const Search = React.lazy(() => import('../../Components/Search/Search'));
-// const NotFound = React.lazy(() => import('../../Components/NotFound/NotFound'));
-// const AlbumView = React.lazy(() =>
-//     import('../../Components/AlbumView/AlbumView')
-// );
-// const Library = React.lazy(() => import('../../Components/Library/Library'));
-// const ArtistView = React.lazy(() =>
-//     import('../../Components/ArtistView/ArtistView')
-// );
-// const GenreView = React.lazy(() =>
-//     import('../../Components/GenreView/GenreView')
-// );
-/*
-const GridSidedrawer = styled(Grid)`
-  position: fixed;
-  top: 0;
-  left: 0;
-  height: 100vh;
-`;
-
-const GridHomePage = styled(Grid)`
-  padding-bottom: 100px;
-  width: 100%;
-`;
-
-const Background = styled.div`
-  background-image: ${props => props.background};
-  width: 100%;
-  height: 100vh;
-  background-size: cover;
-  background-repeat: no-repeat;
-  position: fixed;
-  top: 0;
-  left: 0;
-  z-index: -1000;
-`;
-*/
 class Layout extends Component {
   state = {
     sideDrawerOpen: false,
@@ -112,8 +61,8 @@ class Layout extends Component {
           .catch(err => console.log(err));
       } else {
         window.location = `https://accounts.spotify.com/authorize?client_id=${
-          '7fd0742a8641475a91a761f988b1522c'
-        }&redirect_uri=${'http://localhost:3000/callback'}&scope=${
+          '8c8d6401e5c24c5585d2e89e93804cd1'
+        }&redirect_uri=${'http://localhost:3001/callback'}&scope=${
           'streaming'
         }&response_type=token`;
       }
@@ -141,24 +90,7 @@ class Layout extends Component {
     }
     return hashParams;
   }
-/*
-  toggleDrawerHandler = () => {
-    let mode = this.state.sideDrawerOpen;
-    this.setState({ sideDrawerOpen: !mode });
-  };
-*/
   render() {
-    /*
-    let drawer =
-      this.props.width === 'lg' || this.props.width === 'xl' ? (
-        <Sidedrawer />
-      ) : (
-        <Sidedrawer
-          open={this.state.sideDrawerOpen}
-          toggleDrawer={this.toggleDrawerHandler}
-        />
-      );
-    */
     return this.props.user ? (
       
 

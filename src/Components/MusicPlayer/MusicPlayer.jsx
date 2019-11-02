@@ -54,7 +54,7 @@ class MusicPlayer extends Component {
         if (window.Spotify) {
             clearInterval(this.playerCheckInterval);
             this.player = new window.Spotify.Player({
-                name: "Ew WEP",
+                name: "Ew WEB",
                 getOAuthToken: cb => {
                     cb(token);
                 }
@@ -129,8 +129,6 @@ class MusicPlayer extends Component {
         this.player.getCurrentState().then(state => {
             if (state && this.state.playing) {
                 let { duration, position } = state;
-                // duration = 100%
-                // position = ?%
                 let val = (position * 100) / duration;
                 if (val !== this.state.positionSliderValue) {
                     this.setState({
@@ -148,7 +146,7 @@ class MusicPlayer extends Component {
                 this.setState({ positionStamp, durationStamp });
                 this.props.setPozitionStamp(state.position);
                 this.props.setDurationStamps(state.duration)
-                console.log(state.duration)
+                console.log(this.props.setDurationStamps(state.duration))
             }
         });
     };
@@ -237,7 +235,7 @@ class MusicPlayer extends Component {
                     style={{ marginTop: 20 }}
                 >
                     Oynatıcıyı etkinleştirmek için Spotify uygulamasına gidin, 
-                    cihazlara tıklayın ve Ew WEP uygulamasını seçin
+                    cihazlara tıklayın ve Ew WEB uygulamasını seçin
                 </Typography>
             </Card>
         );
@@ -403,7 +401,7 @@ class MusicPlayer extends Component {
             // <Grid container style={containerStyle}>
 
             <div>
-            <div><Editor  zamanagit={this.onSeekSliderChange}/></div>
+            <div><Editor  selectGoTime={this.onSeekSliderChange}/></div>
 
             
             <CssBaseline>
