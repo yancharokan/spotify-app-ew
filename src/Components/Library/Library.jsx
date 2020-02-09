@@ -1,44 +1,44 @@
-import React from 'react';
-import { connect } from 'react-redux';
-import * as actionTypes from '../../store/actions/actionTypes';
-import { Switch, Route } from 'react-router-dom';
-import { UserTracks, UserAlbums, UserPlaylists } from 'react-spotify-api';
+import React from "react";
+import { connect } from "react-redux";
+import * as actionTypes from "../../store/actions/actionTypes";
+import { Switch, Route } from "react-router-dom";
+import { UserTracks, UserAlbums, UserPlaylists } from "react-spotify-api";
 import {
   Grid,
   List,
   ListItem,
   ListItemText,
   ListItemIcon
-} from '@material-ui/core';
-import PauseIcon from '@material-ui/icons/Pause';
-import PlayArrowIcon from '@material-ui/icons/PlayArrow';
-import Navigation from '../Navigation/Navigation';
-import MediaCard from '../MediaCard/MediaCard';
+} from "@material-ui/core";
+import PauseIcon from "@material-ui/icons/Pause";
+import PlayArrowIcon from "@material-ui/icons/PlayArrow";
+import Navigation from "../Navigation/Navigation";
+import MediaCard from "../MediaCard/MediaCard";
 
 const NavigationItems = [
   {
-    link: '/library/playlists',
-    text: 'Playlists'
+    link: "/library/playlists",
+    text: "Playlists"
   },
   {
-    link: '/library/albums',
-    text: 'Albums'
+    link: "/library/albums",
+    text: "Albums"
   },
   {
-    link: '/library/tracks',
-    text: 'Tracks'
+    link: "/library/tracks",
+    text: "Tracks"
   }
 ];
 
 const Library = props => {
   React.useEffect(() => {
-    document.title = 'React Spotify | Library';
+    document.title = "React Spotify | Library";
   }, []);
   let savedPlaylists = (
     <UserPlaylists>
       {playlists =>
         playlists ? (
-          <Grid container spacing={16} style={{ margin: 0, width: '100%' }}>
+          <Grid container spacing={16} style={{ margin: 0, width: "100%" }}>
             {playlists.items.map(playlist => (
               <MediaCard
                 key={playlist.id}
@@ -64,7 +64,7 @@ const Library = props => {
     <UserAlbums>
       {albums =>
         albums ? (
-          <Grid container spacing={16} style={{ margin: 0, width: '100%' }}>
+          <Grid container spacing={16} style={{ margin: 0, width: "100%" }}>
             {albums.items.map(album => (
               <MediaCard
                 key={album.album.id}
@@ -96,15 +96,15 @@ const Library = props => {
                 key={track.track.id}
                 style={
                   props.currentlyPlaying === track.track.name && props.isPlaying
-                    ? { background: '#1db954' }
+                    ? { background: "#1db954" }
                     : null
                 }
               >
-                <ListItemIcon style={{ cursor: 'pointer' }}>
+                <ListItemIcon style={{ cursor: "pointer" }}>
                   {props.currentlyPlaying === track.track.name &&
                   props.isPlaying ? (
                     <PauseIcon
-                      style={{ color: 'green' }}
+                      style={{ color: "green" }}
                       onClick={props.pauseSong}
                     />
                   ) : (
@@ -159,7 +159,4 @@ const mapDispatchToProps = dispatch => {
   };
 };
 
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(Library);
+export default connect(mapStateToProps, mapDispatchToProps)(Library);

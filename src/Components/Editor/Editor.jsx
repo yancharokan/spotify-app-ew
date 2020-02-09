@@ -1,26 +1,156 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
 import * as actionTypes from "../../store/actions/actionTypes";
-import { Box, Tab, Tabs, Text, Grommet, Grid } from "grommet";
-import Coreography from "../Coreography/Coreography";
+import { Grid } from "grommet";
 import { makeStyles } from "@material-ui/styles";
-import { grommet } from "grommet/themes";
-import TextField from "@material-ui/core/TextField";
 import { toaster } from "evergreen-ui";
+import Button from "@material-ui/core/Button";
+import Icon from "@material-ui/core/Icon";
+import ExportCSV from "../Coreography/ExportCSV/ExportCSV";
+import socketIo from "socket.io-client";
+import Papa from "papaparse";
+import gotCSV from "../../got.csv";
+import * as d3 from "d3";
+import CorDraw from "../Coreography/CorDraw";
 import { Typography, CardHeader, Card, CardContent } from "@material-ui/core";
-
 const useStyles = makeStyles(theme => ({
-  root: {
-    padding: theme.spacing(4)
+  button: {
+    margin: theme.spacing(1)
   }
 }));
 class Editor extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      seconds: []
+      fileName: "Koreografi.csv",
+      excelData: [],
+      initialTime: null,
+      finishTime: null,
+      seconds: [],
+      socket: null,
+      data: []
     };
   }
+  changeStart(e) {
+    this.setState({
+      initialTime: e.target.value
+    });
+  }
+  changeEnd(e) {
+    this.setState({
+      finishTime: e.target.value
+    });
+  }
+  // toBase64 = file => {
+  //   new Promise((resolve, reject) => {
+  //     const reader = new FileReader();
+  //     reader.readAsDataURL(file);
+  //     reader.onload = () => resolve(reader.result);
+  //     reader.onerror = error => reject(error);
+  //   });
+  //   const file = document.querySelector(gotCSV).files[0];
+  // };
+
+  componentDidMount() {
+    this.state.socket = socketIo.connect("http://192.168.1.24:8080/");
+    this.state.socket.on("my_response", data => {});
+  }
+
+  fetchCsv() {
+    return fetch(require("../../got.csv")).then(function(response) {
+      let reader = response.body.getReader();
+      let decoder = new TextDecoder("utf-8");
+
+      return reader.read().then(function(result) {
+        return decoder.decode(result.value);
+      });
+    });
+  }
+
+  getData = result => {
+    this.setState({ data: result.data });
+  };
+
+  async getCsvData() {
+    let csvData = await this.fetchCsv();
+
+    Papa.parse(csvData, {
+      complete: this.getData
+    });
+  }
+  onCsvExcel = () => {
+    const dataForExcel = [];
+    if (this.props.csvData.length !== 0) {
+      this.props.csvData.forEach(element => {
+        dataForExcel.push({
+          "Başlama Zamanı": element.startDate,
+          "Bitiş Zamanı": element.endDate,
+          "Sağ Robot Hızı": element.rRobotsSpeed,
+          "Sol Robot Hızı": element.lRobotsSpeed,
+          "Sağ Robot Rengi": element.rColor,
+          "Sol Robot Rengi": element.lColor,
+          Sis: element.smoke,
+          Flaşör: element.blinker
+        });
+      });
+      dataForExcel.push({
+        "Şarkı Süresi": this.milisToMinutesAndSeconds(
+          this.props.durationStamps
+        ),
+        "Çalan Şarkı İsmi": this.props.currently_playing
+      });
+
+      this.setState({
+        excelData: dataForExcel
+      });
+    }
+  };
+
+  // onPressCSV = () => {
+  //   d3.csv(gotCSV).then(function(d, error) {
+  //     if (error) {
+  //       console.log(error);
+  //     } else {
+  //       console.log(typeof d);
+  //     }
+  //   });
+  //   const dataForExcel = [];
+  //   let idCardBase64 = "";
+  //   if (this.props.csvData.length !== 0) {
+  //     this.props.csvData.forEach(element => {
+  //       console.log(element.startDate);
+  //       dataForExcel.push({
+  //         "Şarkı Süresi": this.milisToMinutesAndSeconds(
+  //           this.props.durationStamps
+  //         ),
+  //         "Başlama Zamanı": element.startDate,
+  //         "Bitiş Zamanı": element.endDate,
+  //         "Sağ Robot Hızı": element.rRobotsSpeed
+  //       });
+  //     });
+
+  //     this.setState({
+  //       excelData: dataForExcel
+  //     });
+  //     this.state.socket.emit(
+  //       "csv_is_comming",
+  //       // d3.csv(gotCSV).then(function(d, error) {
+  //       //   if (error) {
+  //       //     console.log(error);
+  //       //   } else {
+  //       //     console.log(typeof d);
+  //       //   }
+  //       // })
+  //       this.getBase64(gotCSV, result => {
+  //         idCardBase64 = result;
+  //       })
+  //     );
+  //   }
+
+  //   //  else {
+  //   //   toaster.danger(this.state.platformMessage.errorMessage);
+  //   // }
+  // };
 
   milisToMinutesAndSeconds = mil => {
     let minutes = Math.floor(mil / 60000);
@@ -40,7 +170,7 @@ class Editor extends Component {
 
   render() {
     let timeOfSum = this.milisToMinutesAndSeconds(this.props.durationStamps);
-    let currentTime = this.milisToMinutesAndSeconds(this.props.pozition_stamp);
+    let currentTime = this.milisToMinutesAndSeconds(this.props.position_stamp);
     if (!timeOfSum) {
       toaster.danger("Lütfen Spotify Uygulamasından EW uygulamasını seçiniz.");
     }
@@ -113,44 +243,76 @@ class Editor extends Component {
     //     </Grommet>
     //   );
     // }
-    console.log(timeOfSum);
+    // console.log(this.state.endTime);
+    // console.log(this.state.startTime);
     return (
       <div>
         <Grid container spacing={4}>
           {timeOfSum && (
-            <Grid item lg={12} md={6} xl={3} xs={12}>
+            <div>
               <Grid item lg={3} md={12} xl={9} xs={12}>
-                <TextField
-                  id="outlined-number"
-                  label="Başlangıç"
-                  type="number"
-                  InputLabelProps={{
-                    shrink: true
-                  }}
-                  margin="normal"
-                  variant="outlined"
-                />
-              
+                <Card style={{ textAlign: "center" }}>
+                  <Typography center variant="h5">
+                    Şarkı süresi {timeOfSum} saniye
+                  </Typography>
+                </Card>
+              </Grid>
+              <Grid item lg={3} md={12} xl={9} xs={12}>
+                <CorDraw />
 
+                {/* <div>
+                  <TextField
+                    id="outlined-number"
+                    label="Başlangıç"
+                    name="startTime"
+                    type="number"
+                    onChange={e => this.changeStart(e)}
+                    InputLabelProps={{
+                      shrink: true
+                    }}
+                    margin="normal"
+                    variant="outlined"
+                  />
+                </div>
+              </Grid>
               <Grid item lg={3} md={12} xl={9} xs={12}>
-                <Typography>Şarkı süresi {timeOfSum} saniye</Typography>
+                <div>
+                  <TextField
+                    id="outlined-number"
+                    label="Bitiş"
+                    name="endTime"
+                    type="number"
+                    onChange={e => this.changeEnd(e)}
+                    InputLabelProps={{
+                      shrink: true
+                    }}
+                    margin="normal"
+                    variant="outlined"
+                  />
+                </div> */}
               </Grid>
-
-              <Grid item lg={3} md={12} xl={9} xs={12}>
-                <TextField
-                  id="outlined-number"
-                  label="Bitiş"
-                  type="number"
-                  InputLabelProps={{
-                    shrink: true
-                  }}
-                  margin="normal"
-                  variant="outlined"
-                />
-              </Grid>
-              </Grid>
-              <Coreography />
-            </Grid>
+              <Button
+                className={useStyles.button}
+                variant="contained"
+                color="primary"
+                onClick={this.onCsvExcel}
+              >
+                HİSSET
+              </Button>
+              <div style={{ textAlign: "right" }}>
+                <Button
+                  className={useStyles.button}
+                  variant="contained"
+                  color="primary"
+                  endIcon={<Icon>Yolla</Icon>}
+                >
+                  <ExportCSV
+                    csvData={this.state.excelData}
+                    fileName={this.state.fileName}
+                  />
+                </Button>
+              </div>
+            </div>
           )}
         </Grid>
       </div>
@@ -160,18 +322,17 @@ class Editor extends Component {
 
 const mapStateToProps = state => {
   return {
-    pozition_stamp: state.pozition_stamp,
-    durationStamps: state.durationStamps
+    position_stamp: state.position_stamp,
+    durationStamps: state.durationStamps,
+    currently_playing: state.currently_playing,
+    csvData: state.csvData
   };
 };
 const mapDispatchToProps = dispatch => {
   return {
-    setPozitionStamp: pozition_stamp =>
-      dispatch({ type: actionTypes.NOW_POZITION_STAMP, pozition_stamp })
+    setPositionStamp: position_stamp =>
+      dispatch({ type: actionTypes.NOW_POSITION_STAMP, position_stamp })
   };
 };
 
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(Editor);
+export default connect(mapStateToProps, mapDispatchToProps)(Editor);
