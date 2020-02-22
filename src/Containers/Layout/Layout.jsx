@@ -18,7 +18,7 @@ class Layout extends Component {
 
   isOnMobile = () => {
     var check = false;
-    (function(a) {
+    (function (a) {
       if (
         /(android|bb\d+|meego).+mobile|avantgo|bada\/|blackberry|blazer|compal|elaine|fennec|hiptop|iemobile|ip(hone|od)|iris|kindle|lge |maemo|midp|mmp|mobile.+firefox|netfront|opera m(ob|in)i|palm( os)?|phone|p(ixi|re)\/|plucker|pocket|psp|series(4|6)0|symbian|treo|up\.(browser|link)|vodafone|wap|windows ce|xda|xiino/i.test(
           a
@@ -62,9 +62,9 @@ class Layout extends Component {
       } else {
         window.location = `https://accounts.spotify.com/authorize?client_id=${
           '8c8d6401e5c24c5585d2e89e93804cd1'
-        }&redirect_uri=${'http://localhost:3001/callback'}&scope=${
+          }&redirect_uri=${'http://localhost:3000/callback'}&scope=${
           'streaming'
-        }&response_type=token`;
+          }&response_type=token`;
       }
     }
   }
@@ -92,25 +92,25 @@ class Layout extends Component {
   }
   render() {
     return this.props.user ? (
-      
 
 
-          <React.Fragment>
-        
-            <SpotifyApiContext.Provider value={this.props.user.access_token}>
 
-              <MusicPlayer /> 
+      <React.Fragment>
 
-          
-            </SpotifyApiContext.Provider>
-          </React.Fragment>
-      
+        <SpotifyApiContext.Provider value={this.props.user.access_token}>
+
+          <MusicPlayer />
+
+
+        </SpotifyApiContext.Provider>
+      </React.Fragment>
+
     ) : (
-      <Switch>
-        <Route component={Login} />
-      </Switch>
-      
-    );
+        <Switch>
+          <Route component={Login} />
+        </Switch>
+
+      );
   }
 }
 

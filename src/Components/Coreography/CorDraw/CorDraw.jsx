@@ -50,74 +50,121 @@ class CorDraw extends Component {
       data: [
         {
           startDate: 1,
-          endDate: 10,
-          lRobotsSpeed: 39,
-          rRobotsSpeed: 59,
-          rColor: "#CD5C5C",
-          lColor: "#00FF00",
-          smoke: 1,
-          blinker: 0
+          lRobotsSpeed1: 390,
+          lRobotsSpeed2: 550,
+          rRobotsSpeed1: 591,
+          rRobotsSpeed2: 400,
+          rColor1: "6600",
+          rColor2: "6600",
+          rColor3: "6600",
+          lColor1: "5500",
+          lColor2: "5500",
+          lColor3: "5500",
+          // smoke: 1,
+          blinker: 5
         },
         {
-          startDate: 10,
-          endDate: 50,
-          lRobotsSpeed: 12,
-          rRobotsSpeed: 59,
-          rColor: "#00FFFF",
-          lColor: "#00FF00",
-          smoke: 1,
-          blinker: 0
+          startDate: 2,
+          lRobotsSpeed1: 390,
+          lRobotsSpeed2: 550,
+          rRobotsSpeed1: 591,
+          rRobotsSpeed2: 400,
+          rColor1: "6600",
+          rColor2: "6600",
+          rColor3: "6600",
+          lColor1: "5500",
+          lColor2: "5500",
+          lColor3: "5500",
+          // smoke: 1,
+          blinker: 3
         }
       ],
       columns: [
         { title: "Başlangıç", field: "startDate", type: "numeric" },
-        { title: "Bitiş", field: "endDate", type: "numeric" },
+        { title: "SOL1", field: "lRobotsSpeed1", type: "numeric" },
+        { title: "SOL2", field: "lRobotsSpeed2", type: "numeric" },
+        { title: "SAG1", field: "rRobotsSpeed1", type: "numeric" },
+        { title: "SAG2", field: "rRobotsSpeed2", type: "numeric" },
         {
-          title: "Sol Işık Robotu Hızı",
-          field: "lRobotsSpeed",
-          type: "numeric"
-        },
-        {
-          title: "Sağ Işık Robotu Hızı",
-          field: "rRobotsSpeed",
-          type: "numeric"
-        },
-        {
-          title: "Sağ Robot Renk",
-          field: "rColor",
+          title: "Sağ Robot Renk1",
+          field: "rColor1",
           lookup: {
-            "#CD5C5C": "turuncu",
-            "#FF0000": "kırmızı",
-            "#FFFF00": "sarı",
-            "#00FFFF": "turkuaz",
-            "#00FF00": "lime"
+            "5500": "turuncu",
+            "6600": "kırmızı",
+            "9222": "sarı",
+            "7888": "turkuaz",
+            "8912": "lime"
+          }
+        },
+        {
+          title: "Sağ Robot Renk2",
+          field: "rColor2",
+          lookup: {
+            "5500": "turuncu",
+            "6600": "kırmızı",
+            "9222": "sarı",
+            "7888": "turkuaz",
+            "8912": "lime"
+          }
+        },
+        {
+          title: "Sağ Robot Renk3",
+          field: "rColor3",
+          lookup: {
+            "5500": "turuncu",
+            "6600": "kırmızı",
+            "9222": "sarı",
+            "7888": "turkuaz",
+            "8912": "lime"
           }
         },
         {
           title: "Sol Robot Renk",
-          field: "lColor",
+          field: "lColDor1",
           lookup: {
-            "#CD5C5C": "turuncu",
-            "#FF0000": "kırmızı",
-            "#FFFF00": "sarı",
-            "#00FFFF": "turkuaz",
-            "#00FF00": "lime"
+            "5500": "turuncu",
+            "6600": "kırmızı",
+            "9222": "sarı",
+            "7888": "turkuaz",
+            "8912": "lime"
           }
         },
         {
-          title: "Sis",
-          field: "smoke",
-          lookup: { 1: "Aktif", 0: "Pasif" }
+          title: "Sol Robot Renk",
+          field: "lColor2",
+          lookup: {
+            "5500": "turuncu",
+            "6600": "kırmızı",
+            "9222": "sarı",
+            "7888": "turkuaz",
+            "8912": "lime"
+          }
         },
+        {
+          title: "Sol Robot Renk",
+          field: "lColor3",
+          lookup: {
+            "5500": "turuncu",
+            "6600": "kırmızı",
+            "9222": "sarı",
+            "7888": "turkuaz",
+            "8912": "lime"
+          }
+        },
+        // {
+        //   title: "Sis",
+        //   field: "smoke",
+        //   lookup: { 1: "Aktif", 0: "Pasif" }
+        // },
         {
           title: "Flaşör",
           field: "blinker",
-          lookup: { 1: "Aktif", 0: "Pasif" }
+          type: "numeric"
         }
       ]
     };
   }
-  onCsvData = () => {};
+  onCsvData = () => { };
 
   render() {
     this.props.setCsvData(this.state.data);

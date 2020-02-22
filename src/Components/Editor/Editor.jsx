@@ -41,27 +41,17 @@ class Editor extends Component {
       finishTime: e.target.value
     });
   }
-  // toBase64 = file => {
-  //   new Promise((resolve, reject) => {
-  //     const reader = new FileReader();
-  //     reader.readAsDataURL(file);
-  //     reader.onload = () => resolve(reader.result);
-  //     reader.onerror = error => reject(error);
-  //   });
-  //   const file = document.querySelector(gotCSV).files[0];
-  // };
-
   componentDidMount() {
     this.state.socket = socketIo.connect("http://192.168.1.24:8080/");
-    this.state.socket.on("my_response", data => {});
+    this.state.socket.on("my_response", data => { });
   }
 
   fetchCsv() {
-    return fetch(require("../../got.csv")).then(function(response) {
+    return fetch(require("../../got.csv")).then(function (response) {
       let reader = response.body.getReader();
       let decoder = new TextDecoder("utf-8");
 
-      return reader.read().then(function(result) {
+      return reader.read().then(function (result) {
         return decoder.decode(result.value);
       });
     });
@@ -78,33 +68,55 @@ class Editor extends Component {
       complete: this.getData
     });
   }
+  getBase64(file, cb) {
+    let reader = new FileReader();
+    reader.readAsDataURL(file);
+    reader.onload = function () {
+      cb(reader.result)
+    };
+    reader.onerror = function (error) {
+      console.log('Error: ', error);
+    };
+
+  }
   onCsvExcel = () => {
     const dataForExcel = [];
     if (this.props.csvData.length !== 0) {
       this.props.csvData.forEach(element => {
         dataForExcel.push({
-          "Başlama Zamanı": element.startDate,
-          "Bitiş Zamanı": element.endDate,
-          "Sağ Robot Hızı": element.rRobotsSpeed,
-          "Sol Robot Hızı": element.lRobotsSpeed,
-          "Sağ Robot Rengi": element.rColor,
-          "Sol Robot Rengi": element.lColor,
-          Sis: element.smoke,
-          Flaşör: element.blinker
+          "A": element.startDate,
+          "B": element.rRobotsSpeed1,
+          "C": element.rRobotsSpeed2,
+          "D": element.lRobotsSpeed1,
+          "E": element.lRobotsSpeed2,
+          "F": element.rColor1,
+          "G": element.rColor2,
+          "H": element.rColor3,
+          "I": element.lColor2,
+          "J": element.lColor3,
+          // Sis: element.smoke,
+          "K": element.blinker
         });
       });
-      dataForExcel.push({
-        "Şarkı Süresi": this.milisToMinutesAndSeconds(
-          this.props.durationStamps
-        ),
-        "Çalan Şarkı İsmi": this.props.currently_playing
-      });
-
+      // dataForExcel.push({
+      //   "Şarkı Süresi": this.milisToMinutesAndSeconds(
+      //     this.props.durationStamps
+      //   ),
+      //   "Çalan Şarkı İsmi": this.props.currently_playing
+      // });
       this.setState({
         excelData: dataForExcel
       });
     }
+    let stringCSV = JSON.stringify(this.props.csvData);;
+    const encodedString = new Buffer(stringCSV).toString('base64');
+    this.state.socket.emit(
+      "csv_is_comming",
+      encodedString
+    );
   };
+
+
 
   // onPressCSV = () => {
   //   d3.csv(gotCSV).then(function(d, error) {
@@ -259,37 +271,6 @@ class Editor extends Component {
               </Grid>
               <Grid item lg={3} md={12} xl={9} xs={12}>
                 <CorDraw />
-
-                {/* <div>
-                  <TextField
-                    id="outlined-number"
-                    label="Başlangıç"
-                    name="startTime"
-                    type="number"
-                    onChange={e => this.changeStart(e)}
-                    InputLabelProps={{
-                      shrink: true
-                    }}
-                    margin="normal"
-                    variant="outlined"
-                  />
-                </div>
-              </Grid>
-              <Grid item lg={3} md={12} xl={9} xs={12}>
-                <div>
-                  <TextField
-                    id="outlined-number"
-                    label="Bitiş"
-                    name="endTime"
-                    type="number"
-                    onChange={e => this.changeEnd(e)}
-                    InputLabelProps={{
-                      shrink: true
-                    }}
-                    margin="normal"
-                    variant="outlined"
-                  />
-                </div> */}
               </Grid>
               <Button
                 className={useStyles.button}
