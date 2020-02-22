@@ -42,7 +42,7 @@ class Editor extends Component {
     });
   }
   componentDidMount() {
-    this.state.socket = socketIo.connect("http://192.168.1.24:8080/");
+    this.state.socket = socketIo.connect("http://192.168.1.38:8080/");
     this.state.socket.on("my_response", data => { });
   }
 
@@ -108,12 +108,13 @@ class Editor extends Component {
         excelData: dataForExcel
       });
     }
-    let stringCSV = JSON.stringify(this.props.csvData);;
-    const encodedString = new Buffer(stringCSV).toString('base64');
+    let stringCSV = JSON.stringify(this.state.excelData);
+    const encodedString ={ "base": new Buffer(stringCSV).toString('base64'), "time":this.milisToMinutesAndSeconds(this.props.durationStamps)}
     this.state.socket.emit(
       "csv_is_comming",
       encodedString
     );
+    console.log(encodedString)
   };
 
 
