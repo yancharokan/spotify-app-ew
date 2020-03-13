@@ -1,11 +1,12 @@
 
-import pandas   as pd
-import numpy    as np
+import pandas as pd
+import numpy as np
 import datetime as d
-from   datetime import timedelta
+from datetime import timedelta
 from pandas.util.testing import rands
 from datetime import timedelta
-import datetime, time
+import datetime
+import time
 from time import sleep
 import Adafruit_PCA9685
 import os
@@ -31,13 +32,13 @@ led_channe12 = hat.channels[12]
 led_channe13 = hat.channels[13]
 
 
-#from mutagen.mp3 import MP3
+# from mutagen.mp3 import MP3
 
 
-RED_PIN   = 4
+RED_PIN = 4
 GREEN_PIN = 22
-BLUE_PIN  = 27
-STEPS     = 1
+BLUE_PIN = 27
+STEPS = 1
 
 pwm = Adafruit_PCA9685.PCA9685()
 bright = 255
@@ -49,6 +50,8 @@ abort = False
 state = True
 pi = pigpio.pi()
 print(pi.connected)
+
+
 def set_servo_pulse(channel, pulse):
     pulse_length = 1000000    # 1,000,000 us per second
     pulse_length //= 60       # 60 Hz
@@ -59,9 +62,12 @@ def set_servo_pulse(channel, pulse):
     pulse //= pulse_length
     pwm.set_pwm(channel, 0, pulse)
 
+
 def setLights(pin, brightness):
     realBrightness = int(int(brightness) * (float(bright) / 255.0))
     pi.set_PWM_dutycycle(pin, realBrightness)
+
+
 def getCh():
     fd = sys.stdin.fileno()
     old_settings = termios.tcgetattr(fd)
@@ -75,43 +81,46 @@ def getCh():
     return ch
 
 
-
 # import LEDs1.py
-
 pwm.set_pwm_freq(60)
 
-tumsure=100
+tumsure = 100
 
 sarki_suresi = datetime.timedelta(seconds=tumsure)
-sure=pd.timedelta_range(start='0 s', end=sarki_suresi, freq='01s')
-sure=pd.DataFrame(dict(A=sure))
-uzunluk =sure.__len__()
-servo_aci_kon = pd.DataFrame(np.random.randint(200,600,size=(uzunluk, 4)), columns=list("BCDE"))
-rgbled = pd.DataFrame(np.random.randint(0,65535,size=(uzunluk, 6)), columns=list('FGHIJK'))
-flash= pd.DataFrame(np.random.randint(0,10,size=(uzunluk, 1)), columns=list('U'))
-datamp3= pd.concat([sure,servo_aci_kon,rgbled,flash],axis=1)
-then = datetime.datetime.now() + sarki_suresi
+sure = pd.timedelta_range(start='0 s', end=sarki_suresi, freq='01s')
+sure = pd.DataFrame(dict(A=sure))
+uzunluk = sure.__len__()
+servo_aci_kon = pd.DataFrame(np.random.randint(
+    200, 600, size=(uzunluk, 4)), columns=list("BCDE"))
+rgbled = pd.DataFrame(np.random.randint(
+    0, 65535, size=(uzunluk, 6)), columns=list('FGHIJK'))
+flash = pd.DataFrame(np.random.randint(
+    0, 10, size=(uzunluk, 1)), columns=list('U'))
+datamp3 = pd.concat([sure, servo_aci_kon, rgbled, flash], axis=1)
+nowTrackTime = datetime.datetime.now() + sarki_suresi
 datamp3.to_csv('randomm')
-def calmaBaslat(gelencsv,sarki_suresi):
-    sarki_suresiTime = timedelta(seconds=sarki_suresi)
-    then = datetime.datetime.now() + sarki_suresiTime
-    i=1
+
+
+def calmaBaslat(gelencsv, sarki_suresi):
+    trackTime = timedelta(seconds=sarki_suresi)
+    nowTrackTime = datetime.datetime.now() + trackTime
+    i = 1
     print('çalma başladı')
-    datamp3=pd.read_json(gelencsv)
+    datamp3 = pd.read_json(gelencsv)
     print(datamp3)
-    while sarki_suresi>i:
-        birincia =datamp3.A[i-1]-1
-        birincisaniye = pd.to_timedelta(datamp3.A[i-1], unit='s')
-        ikincisaniye = pd.to_timedelta(datamp3.A[i], unit='s')
-        print(birincisaniye)
-        kalan_sure = then - datetime.datetime.now()
-        sure = sarki_suresiTime - kalan_sure
-        arazaman = ikincisaniye - birincisaniye
+    while sarki_suresi > i:
+        initialTrackSeconds = datamp3.A[i-1]-1
+        firstSecond = pd.to_timedelta(datamp3.A[i-1], unit='s')
+        secondSeconds = pd.to_timedelta(datamp3.A[i], unit='s')
+        print(firstSecond)
+        kalan_sure = nowTrackTime - datetime.datetime.now()
+        sure = trackTime - kalan_sure
+        fixBlinkTime = secondSeconds - firstSecond
         # led1=datamp3.D[i-1]
         print("if kontrol")
-        print(birincia)
+        print(initialTrackSeconds)
         print(sure.seconds)
-        if sure.seconds== birincia :
+        if sure.seconds == initialTrackSeconds:
             print(datamp3.A[i-1])
             pwm.set_pwm(1, 0, int(datamp3.C[i-1]))
             print(datamp3.B[i-1])
@@ -127,13 +136,13 @@ def calmaBaslat(gelencsv,sarki_suresi):
             led_channe5 . duty_cycle = int(datamp3.K[i-1])
             led_channe12 . duty_cycle = int(datamp3.L[i-1])
             led_channe13 . duty_cycle = int(datamp3.M[i-1])
-            
-            sefer=datamp3.K[ i - 1 ]
-            sira=1
-            while int(sefer)>0:
-                parca=sefer+1
-                arazaman=(1/parca)
-                while parca>sira:
+
+            blink = datamp3.K[i - 1]
+            line = 1
+            if (int(blink) > 0):
+                blinkTime = blink+2
+                fixBlinkTime = (1/blinkTime)
+                while blinkTime >= line:
                     print("led kapat")
                     led_channe0 . duty_cycle = 0
                     led_channe1 . duty_cycle = 0
@@ -141,8 +150,8 @@ def calmaBaslat(gelencsv,sarki_suresi):
                     led_channe3 . duty_cycle = 0
                     led_channe4 . duty_cycle = 0
                     led_channe5 . duty_cycle = 0
-                    print(arazaman)
-                    sleep(arazaman)
+                    print(fixBlinkTime)
+                    sleep(fixBlinkTime)
                     print("led ac")
                     led_channe0 . duty_cycle = int(datamp3.F[i-1])
                     led_channe1 . duty_cycle = int(datamp3.G[i-1])
@@ -150,20 +159,20 @@ def calmaBaslat(gelencsv,sarki_suresi):
                     led_channe3 . duty_cycle = int(datamp3.I[i-1])
                     led_channe4 . duty_cycle = int(datamp3.J[i-1])
                     led_channe5 . duty_cycle = int(datamp3.K[i-1])
-                    sleep(arazaman)
-                    sira=sira+1
+                    sleep(fixBlinkTime)
+                    line = line+1
                 print("led kapat")
-                sleep(1/2)
-                sefer=0
-
-            sleep(arazaman)
-            i=i+1
-        elif sure.seconds < birincia :
-            i=i
+                # sleep(1/2)
+                blink = 0
+            print(sure - datetime.datetime.now())
+            sleep(sure - datetime.datetime.now())
+            i = i+1
+        elif sure.seconds < initialTrackSeconds:
+            i = i
             print("data biraz ileride")
             sleep(0.001)
         else:
-            i=i+2
+            i = i+2
             print("data biraz geride")
             sleep(0.001)
     print("gecmıs olsun")
