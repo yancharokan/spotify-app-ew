@@ -17,7 +17,7 @@ import Remove from "@material-ui/icons/Remove";
 import SaveAlt from "@material-ui/icons/SaveAlt";
 import Search from "@material-ui/icons/Search";
 import ViewColumn from "@material-ui/icons/ViewColumn";
-import { Button } from "@material-ui/core";
+
 
 const tableIcons = {
   Add: forwardRef((props, ref) => <AddBox {...props} ref={ref} />),
@@ -47,128 +47,199 @@ class CorDraw extends Component {
     super(props);
 
     this.state = {
-      data: [
+      data: [],
+      corData: [
         {
           startDate: 1,
-          lRobotsSpeed1: 390,
-          lRobotsSpeed2: 550,
-          rRobotsSpeed1: 591,
-          rRobotsSpeed2: 400,
-          rColor1: "6600",
-          rColor2: "6600",
-          rColor3: "6600",
-          lColor1: "5500",
-          lColor2: "5500",
-          lColor3: "5500",
+          lRobotsSpeed1: 200,
+          lRobotsSpeed2: 200,
+          rRobotsSpeed1: 200,
+          rRobotsSpeed2: 200,
+          rColor1: "65534",
+          rColor2: "0",
+          rColor3: "0",
+          lColor1: "0",
+          lColor2: "0",
+          lColor3: "0",
           // smoke: 1,
           blinker: 5
         },
         {
           startDate: 2,
-          lRobotsSpeed1: 390,
-          lRobotsSpeed2: 550,
-          rRobotsSpeed1: 591,
-          rRobotsSpeed2: 400,
-          rColor1: "6600",
-          rColor2: "6600",
-          rColor3: "6600",
-          lColor1: "5500",
-          lColor2: "5500",
-          lColor3: "5500",
+          lRobotsSpeed1: 200,
+          lRobotsSpeed2: 200,
+          rRobotsSpeed1: 200,
+          rRobotsSpeed2: 200,
+          rColor1: "0",
+          rColor2: "0",
+          rColor3: "0",
+          lColor1: "0",
+          lColor2: "6000",
+          lColor3: "0",
           // smoke: 1,
-          blinker: 3
+          blinker: 5
+        },
+        {
+          startDate: 3,
+          lRobotsSpeed1: 200,
+          lRobotsSpeed2: 200,
+          rRobotsSpeed1: 200,
+          rRobotsSpeed2: 200,
+          rColor1: "0",
+          rColor2: "0",
+          rColor3: "0",
+          lColor1: "0",
+          lColor2: "6000",
+          lColor3: "0",
+          // smoke: 1,
+          blinker: 5
+        },
+        {
+          startDate: 4,
+          lRobotsSpeed1: 200,
+          lRobotsSpeed2: 200,
+          rRobotsSpeed1: 200,
+          rRobotsSpeed2: 200,
+          rColor1: "0",
+          rColor2: "0",
+          rColor3: "0",
+          lColor1: "0",
+          lColor2: "6000",
+          lColor3: "0",
+          // smoke: 1,
+          blinker: 5
+        },
+        {
+          startDate: 5,
+          lRobotsSpeed1: 200,
+          lRobotsSpeed2: 200,
+          rRobotsSpeed1: 200,
+          rRobotsSpeed2: 200,
+          rColor1: "0",
+          rColor2: "0",
+          rColor3: "0",
+          lColor1: "0",
+          lColor2: "0",
+          lColor3: "0",
+          // smoke: 1,
+          blinker: 5
         }
+
       ],
       columns: [
         { title: "Başlangıç", field: "startDate", type: "numeric" },
-        { title: "SOL1", field: "lRobotsSpeed1", type: "numeric" },
-        { title: "SOL2", field: "lRobotsSpeed2", type: "numeric" },
-        { title: "SAG1", field: "rRobotsSpeed1", type: "numeric" },
-        { title: "SAG2", field: "rRobotsSpeed2", type: "numeric" },
+        { title: "Sağ Üst Hareket", field: "rRobotsSpeed1", type: "numeric" },
+        { title: "Sağ Alt Hareket", field: "rRobotsSpeed2", type: "numeric" },
+        { title: "Sol Üst Hareket", field: "lRobotsSpeed1", type: "numeric" },
+        { title: "Sol Alt Hareket", field: "lRobotsSpeed2", type: "numeric" },
         {
-          title: "Sağ Robot Renk1",
+          title: "Sağ Robot Kırmızı",
           field: "rColor1",
-          lookup: {
-            "5500": "turuncu",
-            "6600": "kırmızı",
-            "9222": "sarı",
-            "7888": "turkuaz",
-            "8912": "lime"
-          }
+          lookup: { "65534": "Aktif", "0": "Pasif" }
+
         },
         {
-          title: "Sağ Robot Renk2",
+          title: "Sağ Robot Yeşil",
           field: "rColor2",
-          lookup: {
-            "5500": "turuncu",
-            "6600": "kırmızı",
-            "9222": "sarı",
-            "7888": "turkuaz",
-            "8912": "lime"
-          }
+          lookup: { "65534": "Aktif", "0": "Pasif" }
+
         },
         {
-          title: "Sağ Robot Renk3",
+          title: "Sağ Robot Mavi",
           field: "rColor3",
-          lookup: {
-            "5500": "turuncu",
-            "6600": "kırmızı",
-            "9222": "sarı",
-            "7888": "turkuaz",
-            "8912": "lime"
-          }
+          lookup: { "65534": "Aktif", "0": "Pasif" }
+
         },
         {
-          title: "Sol Robot Renk",
-          field: "lColDor1",
-          lookup: {
-            "5500": "turuncu",
-            "6600": "kırmızı",
-            "9222": "sarı",
-            "7888": "turkuaz",
-            "8912": "lime"
-          }
+          title: "Sol Robot Kırmızı",
+          field: "lColor1",
+          lookup: { "65534": "Aktif", "0": "Pasif" }
+
         },
         {
-          title: "Sol Robot Renk",
+          title: "Sol Robot Yeşil",
           field: "lColor2",
-          lookup: {
-            "5500": "turuncu",
-            "6600": "kırmızı",
-            "9222": "sarı",
-            "7888": "turkuaz",
-            "8912": "lime"
-          }
+          lookup: { "65534": "Aktif", "0": "Pasif" }
+
         },
         {
-          title: "Sol Robot Renk",
+          title: "Sol Robot Mavi",
           field: "lColor3",
-          lookup: {
-            "5500": "turuncu",
-            "6600": "kırmızı",
-            "9222": "sarı",
-            "7888": "turkuaz",
-            "8912": "lime"
-          }
+          lookup: { "65534": "Aktif", "0": "Pasif" }
+
         },
-        // {
-        //   title: "Sis",
-        //   field: "smoke",
-        //   lookup: { 1: "Aktif", 0: "Pasif" }
-        // },
         {
           title: "Flaşör",
           field: "blinker",
           type: "numeric"
-        }
+        },
+        {
+          title: "Sis Pompası",
+          field: "smokePump",
+          lookup: { "65534": "Aktif", "0": "Pasif" }
+        },
+        {
+          title: "Sis",
+          field: "smoke",
+          lookup: { "65534": "Aktif", "0": "Pasif" }
+        },
       ]
     };
   }
   onCsvData = () => { };
+  milisToMinutesAndSeconds = mil => {
+    let minutes = Math.floor(mil / 60000);
+    let seconds = ((mil % 60000) / 1000).toFixed(0);
+    let secondsOfSum = Math.floor(Number(minutes) * 60 + Number(seconds));
+    return secondsOfSum;
+  };
+
+  componentDidMount() {
+    let corDataArray = [];
+    let timeOfSum = this.milisToMinutesAndSeconds(this.props.durationStamps);
+    for (let i = 1; i < timeOfSum; i++) {
+      corDataArray.push({
+        startDate: i,
+        rRobotsSpeed1: 40,
+        rRobotsSpeed2: 300,
+        lRobotsSpeed1: 500,
+        lRobotsSpeed2: 590,
+        rColor1: "0",
+        rColor2: "0",
+        rColor3: "0",
+        lColor1: "0",
+        lColor2: "0",
+        lColor3: "0",
+        blinker: 0,
+        smokePump: "0",
+        smoke: "65534"
+
+      }
+      )
+    }
+    corDataArray.push({
+      startDate: timeOfSum,
+      rRobotsSpeed1: 40,
+      rRobotsSpeed2: 300,
+      lRobotsSpeed1: 500,
+      lRobotsSpeed2: 590,
+      rColor1: "0",
+      rColor2: "0",
+      rColor3: "0",
+      lColor1: "0",
+      lColor2: "0",
+      lColor3: "0",
+      blinker: 0,
+      smokePump: "65534",
+      smoke: "65534"
+    })
+    console.log(corDataArray)
+    this.setState({ data: corDataArray })
+  }
 
   render() {
     this.props.setCsvData(this.state.data);
-
+    console.log(this.state.data)
     return (
       <MaterialTable
         icons={tableIcons}
@@ -216,9 +287,14 @@ class CorDraw extends Component {
     );
   }
 }
+const mapStateToProps = state => {
+  return {
+    durationStamps: state.durationStamps,
+  };
+};
 const mapDispatchToProps = dispatch => {
   return {
     setCsvData: csvData => dispatch({ type: actionTypes.CSV_DATA, csvData })
   };
 };
-export default connect(null, mapDispatchToProps)(CorDraw);
+export default connect(mapStateToProps, mapDispatchToProps)(CorDraw);

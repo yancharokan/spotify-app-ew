@@ -42,7 +42,7 @@ class Editor extends Component {
     });
   }
   componentDidMount() {
-    this.state.socket = socketIo.connect("http://192.168.1.38:8080/");
+    this.state.socket = socketIo.connect("http://192.168.1.24:8080/");
     this.state.socket.on("my_response", data => { });
   }
 
@@ -94,8 +94,11 @@ class Editor extends Component {
           "H": element.rColor3,
           "I": element.lColor2,
           "J": element.lColor3,
-          // Sis: element.smoke,
-          "K": element.blinker
+          "K": element.blinker,
+          "L": element.smokePump,
+          "M": element.smoke,
+
+
         });
       });
       // dataForExcel.push({
@@ -109,7 +112,7 @@ class Editor extends Component {
       });
     }
     let stringCSV = JSON.stringify(this.state.excelData);
-    const encodedString ={ "base": new Buffer(stringCSV).toString('base64'), "time":this.milisToMinutesAndSeconds(this.props.durationStamps)}
+    const encodedString = { "base": new Buffer(stringCSV).toString('base64'), "time": this.milisToMinutesAndSeconds(this.props.durationStamps) }
     this.state.socket.emit(
       "csv_is_comming",
       encodedString
@@ -259,45 +262,43 @@ class Editor extends Component {
     // console.log(this.state.endTime);
     // console.log(this.state.startTime);
     return (
-      <div>
-        <Grid container spacing={4}>
-          {timeOfSum && (
-            <div>
-              <Grid item lg={3} md={12} xl={9} xs={12}>
-                <Card style={{ textAlign: "center" }}>
-                  <Typography center variant="h5">
-                    Şarkı süresi {timeOfSum} saniye
+      <Grid container spacing={2}>
+        {timeOfSum && (
+          <Grid >
+            <Grid item lg={3} md={12} xl={9} xs={12}>
+              <Card style={{ textAlign: "center" }}>
+                <Typography center variant="h5">
+                  Şarkı süresi {timeOfSum} saniye
                   </Typography>
-                </Card>
-              </Grid>
-              <Grid item lg={3} md={12} xl={9} xs={12}>
-                <CorDraw />
-              </Grid>
+              </Card>
+            </Grid>
+            <Grid item lg={3} md={12} xl={9} xs={12}>
+              <CorDraw />
+            </Grid>
+            <Button
+              className={useStyles.button}
+              variant="contained"
+              color="primary"
+              onClick={this.onCsvExcel}
+            >
+              HİSSET
+              </Button>
+            <div style={{ textAlign: "right" }}>
               <Button
                 className={useStyles.button}
                 variant="contained"
                 color="primary"
-                onClick={this.onCsvExcel}
+                endIcon={<Icon>Yolla</Icon>}
               >
-                HİSSET
+                <ExportCSV
+                  csvData={this.state.excelData}
+                  fileName={this.state.fileName}
+                />
               </Button>
-              <div style={{ textAlign: "right" }}>
-                <Button
-                  className={useStyles.button}
-                  variant="contained"
-                  color="primary"
-                  endIcon={<Icon>Yolla</Icon>}
-                >
-                  <ExportCSV
-                    csvData={this.state.excelData}
-                    fileName={this.state.fileName}
-                  />
-                </Button>
-              </div>
             </div>
-          )}
-        </Grid>
-      </div>
+          </Grid>
+        )}
+      </Grid>
     );
   }
 }
