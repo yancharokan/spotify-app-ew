@@ -1,4 +1,3 @@
-
 import pandas as pd
 import numpy as np
 import datetime as d
@@ -107,19 +106,21 @@ def calmaBaslat(gelencsv, sarki_suresi):
     i = 1
     print('çalma başladı')
     datamp3 = pd.read_json(gelencsv)
-    print(datamp3)
+    # print(datamp3)
+    #print(trackTime.microseconds)
+    #print(nowTrackTime.microsecond)
     while sarki_suresi > i:
         initialTrackSeconds = datamp3.A[i-1]-1
         firstSecond = pd.to_timedelta(datamp3.A[i-1], unit='s')
         secondSeconds = pd.to_timedelta(datamp3.A[i], unit='s')
-        print(firstSecond)
+        # print(firstSecond)
         kalan_sure = nowTrackTime - datetime.datetime.now()
         sure = trackTime - kalan_sure
         fixBlinkTime = secondSeconds - firstSecond
         # led1=datamp3.D[i-1]
-        print("if kontrol")
-        print(initialTrackSeconds)
-        print(sure.seconds)
+        # print("if kontrol")
+        # print(initialTrackSeconds)
+        # print(sure.seconds)
         if sure.seconds == initialTrackSeconds:
             print(datamp3.A[i-1])
             pwm.set_pwm(1, 0, int(datamp3.C[i-1]))
@@ -164,8 +165,11 @@ def calmaBaslat(gelencsv, sarki_suresi):
                 print("led kapat")
                 # sleep(1/2)
                 blink = 0
-            print(sure - datetime.datetime.now())
-            sleep(sure - datetime.datetime.now())
+            nowMicroseconds= datetime.datetime.now()
+            print(sure.microseconds)
+            print(nowMicroseconds.microsecond)
+            # print((sure - datetime.datetime.now()).microseconds)
+            sleep((nowMicroseconds.microsecond- sure.microseconds)/1000000)
             i = i+1
         elif sure.seconds < initialTrackSeconds:
             i = i
