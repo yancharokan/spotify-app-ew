@@ -27,6 +27,8 @@ led_channe2 = hat.channels[6]
 led_channe3 = hat.channels[7]
 led_channe4 = hat.channels[8]
 led_channe5 = hat.channels[9]
+led_channe12 = hat.channels[12]
+led_channe13 = hat.channels[13]
 
 
 #from mutagen.mp3 import MP3
@@ -123,9 +125,12 @@ def calmaBaslat(gelencsv,sarki_suresi):
             led_channe3 . duty_cycle = int(datamp3.I[i-1])
             led_channe4 . duty_cycle = int(datamp3.J[i-1])
             led_channe5 . duty_cycle = int(datamp3.K[i-1])
+            led_channe12 . duty_cycle = int(datamp3.L[i-1])
+            led_channe13 . duty_cycle = int(datamp3.M[i-1])
+            
             sefer=datamp3.K[ i - 1 ]
             sira=1
-            while sefer>0:
+            while int(sefer)>0:
                 parca=sefer+1
                 arazaman=(1/parca)
                 while parca>sira:
