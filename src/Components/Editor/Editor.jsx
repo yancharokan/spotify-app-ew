@@ -42,7 +42,7 @@ class Editor extends Component {
     });
   }
   componentDidMount() {
-    this.state.socket = socketIo.connect("http://192.168.1.24:8080/");
+    this.state.socket = socketIo.connect("http://0.0.0.0:8080/");
     this.state.socket.on("my_response", data => { });
   }
 

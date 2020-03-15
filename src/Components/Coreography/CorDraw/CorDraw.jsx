@@ -176,12 +176,12 @@ class CorDraw extends Component {
         {
           title: "Sis Pompası",
           field: "smokePump",
-          lookup: { "65534": "Aktif", "0": "Pasif" }
+          lookup: { 1: "Aktif", 0: "Pasif" }
         },
         {
           title: "Sis",
           field: "smoke",
-          lookup: { "65534": "Aktif", "0": "Pasif" }
+          lookup: { 1: "Aktif", 0: "Pasif" }
         },
       ]
     };
@@ -197,7 +197,7 @@ class CorDraw extends Component {
   componentDidMount() {
     let corDataArray = [];
     let timeOfSum = this.milisToMinutesAndSeconds(this.props.durationStamps);
-    for (let i = 1; i < timeOfSum; i++) {
+    for (let i = 0; i < timeOfSum; i++) {
       corDataArray.push({
         startDate: i,
         rRobotsSpeed1: 40,
@@ -211,8 +211,8 @@ class CorDraw extends Component {
         lColor2: "0",
         lColor3: "0",
         blinker: 0,
-        smokePump: "0",
-        smoke: "65534"
+        smokePump: 0,
+        smoke: 0
 
       }
       )
