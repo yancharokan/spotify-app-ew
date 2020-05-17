@@ -1,8 +1,10 @@
 import React, { Component } from "react";
 import Layout from "./Containers/Layout/Layout";
+import { BrowserRouter as Router, Switch, Route, Link } from 'react-router-dom';
 import { MuiThemeProvider, createMuiTheme } from "@material-ui/core/styles";
 import CssBaseline from "@material-ui/core/CssBaseline/CssBaseline";
-
+// import Editor from './Components/Editor/Editor'
+// import OdaIdentify from './Components/OdaIdentify/OdaIdentify'
 class App extends Component {
   render() {
     const theme = createMuiTheme({
@@ -37,6 +39,10 @@ class App extends Component {
             />
           </CssBaseline>
         </MuiThemeProvider>
+         {/* <Switch>
+              <Route path='/coreography' component={Editor} />
+              <Route path='/odaIdentify' component={OdaIdentify} />
+          </Switch> */}
       </div>
     );
   }

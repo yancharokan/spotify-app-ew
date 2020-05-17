@@ -33,9 +33,6 @@ class Layout extends Component {
   };
 
   componentDidMount() {
-    // if (this.isOnMobile()) {
-    //     this.setState({ isOnMobile: true });
-    // }
     let params = this.getHashParams();
     console.log(params);
     if (!this.props.user) {
@@ -47,11 +44,12 @@ class Layout extends Component {
             }
           })
           .then(res => {
+            console.log(res)
             let newUser = {
               access_token: params.access_token,
-              displayName: res.display_name,
-              email: res.email,
-              id: res.id,
+              displayName: res.data.display_name,
+              email: res.data.email,
+              id: res.data.id,
               type: res.type,
               country: res.country
             };
@@ -63,13 +61,14 @@ class Layout extends Component {
         window.location = `https://accounts.spotify.com/authorize?client_id=${
           '8c8d6401e5c24c5585d2e89e93804cd1'
           }&redirect_uri=${'http://localhost:3000/callback'}&scope=${
-          'streaming'
+          'streaming user-read-email'
           }&response_type=token`;
       }
     }
   }
 
   logInUserAndGetInfo = newUser => {
+    console.log({ "newUser": newUser })
     this.props.setUser(newUser); // set user in redux state
     if (this.props.location.pathname === '/') {
       this.props.history.push('/browse/featured'); // if there is no page the user wants to go to

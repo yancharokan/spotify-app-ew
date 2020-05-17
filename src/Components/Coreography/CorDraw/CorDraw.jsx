@@ -174,8 +174,8 @@ class CorDraw extends Component {
           type: "numeric"
         },
         {
-          title: "Sis Pompası",
-          field: "smokePump",
+          title: "Sis Isıtıcı",
+          field: "smokeHeater",
           lookup: { 1: "Aktif", 0: "Pasif" }
         },
         {
@@ -200,42 +200,42 @@ class CorDraw extends Component {
     for (let i = 0; i < timeOfSum; i++) {
       corDataArray.push({
         startDate: i,
-        rRobotsSpeed1: 40,
+        rRobotsSpeed1: 300,
         rRobotsSpeed2: 300,
-        lRobotsSpeed1: 500,
-        lRobotsSpeed2: 590,
-        rColor1: "0",
-        rColor2: "0",
-        rColor3: "0",
+        lRobotsSpeed1: 40,
+        lRobotsSpeed2: 500,
+        rColor1: "65534",
+        rColor2: "65534",
+        rColor3: "65534",
         lColor1: "0",
         lColor2: "0",
         lColor3: "0",
         blinker: 0,
-        smokePump: 0,
+        smokeHeater: 1,
         smoke: 0
-
       }
       )
     }
-    corDataArray.push({
-      startDate: timeOfSum,
-      rRobotsSpeed1: 40,
-      rRobotsSpeed2: 300,
-      lRobotsSpeed1: 500,
-      lRobotsSpeed2: 590,
-      rColor1: "0",
-      rColor2: "0",
-      rColor3: "0",
-      lColor1: "0",
-      lColor2: "0",
-      lColor3: "0",
-      blinker: 0,
-      smokePump: "65534",
-      smoke: "65534"
-    })
+    // corDataArray.push({
+    //   startDate: timeOfSum,
+    //   rRobotsSpeed1: 40,
+    //   rRobotsSpeed2: 300,
+    //   lRobotsSpeed1: 500,
+    //   lRobotsSpeed2: 590,
+    //   rColor1: "0",
+    //   rColor2: "0",
+    //   rColor3: "0",
+    //   lColor1: "0",
+    //   lColor2: "0",
+    //   lColor3: "0",
+    //   blinker: 0,
+    //   smokeHeater: "65534",
+    //   smoke: "65534"
+    // })
     console.log(corDataArray)
     this.setState({ data: corDataArray })
   }
+
 
   render() {
     this.props.setCsvData(this.state.data);

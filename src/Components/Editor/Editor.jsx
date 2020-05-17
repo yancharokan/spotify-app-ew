@@ -5,6 +5,8 @@ import { Grid } from "grommet";
 import { makeStyles } from "@material-ui/styles";
 import { toaster } from "evergreen-ui";
 import Button from "@material-ui/core/Button";
+import axios from "axios"
+import TextField from '@material-ui/core/TextField';
 import Icon from "@material-ui/core/Icon";
 import ExportCSV from "../Coreography/ExportCSV/ExportCSV";
 import socketIo from "socket.io-client";
@@ -12,7 +14,7 @@ import Papa from "papaparse";
 import gotCSV from "../../got.csv";
 import * as d3 from "d3";
 import CorDraw from "../Coreography/CorDraw";
-import { Typography, CardHeader, Card, CardContent } from "@material-ui/core";
+import { Typography, CardHeader, Card, CardContent, CardActions } from "@material-ui/core";
 const useStyles = makeStyles(theme => ({
   button: {
     margin: theme.spacing(1)
@@ -25,11 +27,48 @@ class Editor extends Component {
       fileName: "Koreografi.csv",
       excelData: [],
       initialTime: null,
+      goCoreography: false,
       finishTime: null,
       seconds: [],
       socket: null,
-      data: []
+      data: [],
+      onCloseEveryThing: [
+        {
+          rRobotsSpeed1: 40,
+          rRobotsSpeed2: 40,
+          lRobotsSpeed1: 40,
+          lRobotsSpeed2: 40,
+          rColor1: "0",
+          rColor2: "0",
+          rColor3: "0",
+          lColor1: "0",
+          lColor2: "0",
+          lColor3: "0",
+          blinker: 0,
+          smokeHeater: 0,
+          smoke: 0
+        }
+      ],
     };
+  }
+  onClickAddOdaName = () => {
+    let userData = {
+      email: this.props.user.email,
+      odaName: this.odaName
+    };
+    axios({
+      url: "http://localhost:5000/odaIdentify",
+      method: "POST",
+      data: userData
+    }).then(response => {
+      console.log("response: ", response.data.odaName)
+      if (response.data.odaName) {
+        this.setState({ goCoreography: true })
+      }
+    });
+  }
+  addOdaName(e) {
+    this.odaName = e.target.value;
   }
   changeStart(e) {
     this.setState({
@@ -42,32 +81,21 @@ class Editor extends Component {
     });
   }
   componentDidMount() {
-    this.state.socket = socketIo.connect("http://0.0.0.0:8080/");
-    this.state.socket.on("my_response", data => { });
-  }
-
-  fetchCsv() {
-    return fetch(require("../../got.csv")).then(function (response) {
-      let reader = response.body.getReader();
-      let decoder = new TextDecoder("utf-8");
-
-      return reader.read().then(function (result) {
-        return decoder.decode(result.value);
-      });
-    });
+    var connectionStrings = {
+      "force new connection": true,
+      "reconnectionAttempts": "Infiniy",
+      "timeout": 10000,
+      "transports": ["websocket"]
+    };
+    var socketio_url = 'http://localhost:5000'
+    this.odaName = { name: "Corlu" }
+    this.state.socket = socketIo.connect(socketio_url, connectionStrings);
+    this.state.socket.emit("Odaya Katıl", this.odaName);
   }
 
   getData = result => {
     this.setState({ data: result.data });
   };
-
-  async getCsvData() {
-    let csvData = await this.fetchCsv();
-
-    Papa.parse(csvData, {
-      complete: this.getData
-    });
-  }
   getBase64(file, cb) {
     let reader = new FileReader();
     reader.readAsDataURL(file);
@@ -95,10 +123,8 @@ class Editor extends Component {
           "I": element.lColor2,
           "J": element.lColor3,
           "K": element.blinker,
-          "L": element.smokePump,
+          "L": element.smokeHeater,
           "M": element.smoke,
-
-
         });
       });
       // dataForExcel.push({
@@ -119,6 +145,25 @@ class Editor extends Component {
     );
     console.log(encodedString)
   };
+  onCloseEveryComponent = () => {
+    console.log(this.props.csvData)
+    this.props.csvData.forEach(element => {
+      return element.startDate = 0,
+        element.rRobotsSpeed1 = 40,
+        element.rRobotsSpeed2 = 40,
+        element.lRobotsSpeed1 = 40,
+        element.lRobotsSpeed2 = 40,
+        element.rColor1 = "0",
+        element.rColor2 = "0",
+        element.rColor3 = "0",
+        element.lColor2 = "0",
+        element.lColor3 = "0",
+        element.blinker = 0,
+        element.smokeHeater = 0,
+        element.smoke = 0
+    })
+    console.log(this.state.csvData)
+  }
 
 
 
@@ -185,86 +230,40 @@ class Editor extends Component {
   };
 
   render() {
+    console.log(this.state.goCoreography)
     let timeOfSum = this.milisToMinutesAndSeconds(this.props.durationStamps);
     let currentTime = this.milisToMinutesAndSeconds(this.props.position_stamp);
     if (!timeOfSum) {
       toaster.danger("Lütfen Spotify Uygulamasından EW uygulamasını seçiniz.");
     }
-    // const createTable = lap => {
-    //   let table = [];
-    //   for (let i = 0; i <= lap; i++) {
-    //     table.push(
-    //       <Tab plain={true} title={"" + i + "-"}>
-    //         <Grid
-    //           areas={[
-    //             { name: "oan", start: [1, 1], end: [1, 1] },
-    //             { name: "onceki", start: [0, 1], end: [0, 1] },
-    //             { name: "sonraki", start: [2, 1], end: [2, 1] }
-    //           ]}
-    //           columns={["1/3", "1/3", "1/3"]}
-    //           rows={["", "auto"]}
-    //           gap="small"
-    //         >
-    //           <Box
-    //             gridArea="oan"
-    //             background="brand"
-    //             margin="medium"
-    //             pad="medium"
-    //           >
-    //             <Coreography></Coreography>
-    //           </Box>
-    //           <Box
-    //             gridArea="onceki"
-    //             background="brand"
-    //             margin="medium"
-    //             pad="medium"
-    //           >
-    //             <Text>{i - 1}</Text>
-    //           </Box>
-    //           <Box
-    //             gridArea="sonraki"
-    //             background="brand"
-    //             margin="medium"
-    //             pad="medium"
-    //           >
-    //             <Text>{i + 1}</Text>
-    //           </Box>
-    //         </Grid>
-    //       </Tab>
-    //     );
-    //   }
-    //   return table;
-    // };
-
-    // if (timeOfSum) {
-    //   maincost = (
-    //     <Grommet theme={grommet} full>
-    //       <Box fill={true}>
-    //         <Tabs
-    //           flex
-    //           alignSelf="center"
-    //           background="brand"
-    //           activeIndex={currentTime}
-    //           onActive={i =>
-    //             this.props.selectGoTime(
-    //               "e",
-    //               (1 - (timeOfSum - i) / timeOfSum) * 100
-    //             )
-    //           }
-    //           onClick={this.secondsTable}
-    //         >
-    //           {createTable(timeOfSum)}
-    //         </Tabs>
-    //       </Box>
-    //     </Grommet>
-    //   );
-    // }
-    // console.log(this.state.endTime);
-    // console.log(this.state.startTime);
     return (
-      <Grid container spacing={2}>
-        {timeOfSum && (
-          <Grid >
+      <Grid container>
+        {this.state.goCoreography === false &&
+          <div>
+            <Grid item lg={3} md={12} xl={9} xs={12} />
+            <Grid item lg={3} md={6} xl={6} xs={6}>
+              <Card>
+                <CardHeader>
+                  <Typography variant="h5"> Cihazınıza isim veriniz.</Typography>
+                </CardHeader>
+                <CardContent>
+                  <TextField onChange={e => this.addOdaName(e)}
+                    id="standard-search"
+                    label="Cihazınıza isim veriniz."
+                    type="search" />
+                </CardContent>
+                <CardActions>
+                  <Button onClick={this.onClickAddOdaName} variant="contained" color="primary">
+                    Kaydet
+                </Button>
+                </CardActions>
+              </Card>
+            </Grid>
+            <Grid item lg={3} md={12} xl={9} xs={12} />
+          </div>
+        }
+        {this.state.goCoreography && timeOfSum &&
+          <div>
             <Grid item lg={3} md={12} xl={9} xs={12}>
               <Card style={{ textAlign: "center" }}>
                 <Typography center variant="h5">
@@ -282,6 +281,14 @@ class Editor extends Component {
               onClick={this.onCsvExcel}
             >
               HİSSET
+            </Button>
+            <Button
+              className={useStyles.button}
+              variant="contained"
+              color="primary"
+              onClick={this.onCloseEveryComponent}
+            >
+              KAPAT
               </Button>
             <div style={{ textAlign: "right" }}>
               <Button
@@ -296,25 +303,31 @@ class Editor extends Component {
                 />
               </Button>
             </div>
-          </Grid>
-        )}
+          </div>
+        }
       </Grid>
     );
   }
 }
+
+
 
 const mapStateToProps = state => {
   return {
     position_stamp: state.position_stamp,
     durationStamps: state.durationStamps,
     currently_playing: state.currently_playing,
-    csvData: state.csvData
+    csvData: state.csvData,
+    user: state.current_user,
+    onCloseCsvData: state.onCloseCsvData
   };
 };
 const mapDispatchToProps = dispatch => {
   return {
     setPositionStamp: position_stamp =>
-      dispatch({ type: actionTypes.NOW_POSITION_STAMP, position_stamp })
+      dispatch({ type: actionTypes.NOW_POSITION_STAMP, position_stamp }),
+    setOnCloseCsvData: onCloseCsvData =>
+      dispatch({ type: actionTypes.ON_CLOSE_CSV_DATA, onCloseCsvData }),
   };
 };
 

@@ -12,6 +12,7 @@ const initialState = {
   position_stamp: null,
   durationStamps: "00:00",
   csvData: [],
+  onCloseCsvData: [],
   // rRobotsSpeed: null,
   // lRobotsSpeed: null,
   // startDate: null,
@@ -87,6 +88,11 @@ const reducer = (state = initialState, action) => {
       return {
         ...state,
         csvData: action.csvData
+      };
+    case actionTypes.ON_CLOSE_CSV_DATA:
+      return {
+        ...state,
+        csvData: action.onCloseCsvData
       };
     // case actionTypes.RROBOTS_SPEED:
     //   return {

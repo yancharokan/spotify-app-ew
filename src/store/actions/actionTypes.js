@@ -17,6 +17,8 @@ export const PLAY_SONG_FAIL = "PLAY_SONG_FAIL";
 export const NOW_POSITION_STAMP = "NOW_POSITION_STAMP";
 export const DURATION_STAMP = "DURATION_STAMP";
 export const CSV_DATA = "CSV_DATA";
+export const ON_CLOSE_CSV_DATA = "ON_CLOSE_CSV_DATA";
+
 // export const RROBOTS_SPEED = "RROBOTS_SPEED";
 // export const LROBOTS_SPEED = "LROBOTS_SPEED";
 // export const START_DATE = "START_DATE";
