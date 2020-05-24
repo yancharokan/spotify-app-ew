@@ -10,10 +10,8 @@ import TextField from '@material-ui/core/TextField';
 import Icon from "@material-ui/core/Icon";
 import ExportCSV from "../Coreography/ExportCSV/ExportCSV";
 import socketIo from "socket.io-client";
-import Papa from "papaparse";
-import gotCSV from "../../got.csv";
-import * as d3 from "d3";
 import CorDraw from "../Coreography/CorDraw";
+import Box from "@material-ui/core/Box";
 import { Typography, CardHeader, Card, CardContent, CardActions } from "@material-ui/core";
 const useStyles = makeStyles(theme => ({
   button: {
@@ -165,54 +163,6 @@ class Editor extends Component {
     console.log(this.state.csvData)
   }
 
-
-
-  // onPressCSV = () => {
-  //   d3.csv(gotCSV).then(function(d, error) {
-  //     if (error) {
-  //       console.log(error);
-  //     } else {
-  //       console.log(typeof d);
-  //     }
-  //   });
-  //   const dataForExcel = [];
-  //   let idCardBase64 = "";
-  //   if (this.props.csvData.length !== 0) {
-  //     this.props.csvData.forEach(element => {
-  //       console.log(element.startDate);
-  //       dataForExcel.push({
-  //         "Şarkı Süresi": this.milisToMinutesAndSeconds(
-  //           this.props.durationStamps
-  //         ),
-  //         "Başlama Zamanı": element.startDate,
-  //         "Bitiş Zamanı": element.endDate,
-  //         "Sağ Robot Hızı": element.rRobotsSpeed
-  //       });
-  //     });
-
-  //     this.setState({
-  //       excelData: dataForExcel
-  //     });
-  //     this.state.socket.emit(
-  //       "csv_is_comming",
-  //       // d3.csv(gotCSV).then(function(d, error) {
-  //       //   if (error) {
-  //       //     console.log(error);
-  //       //   } else {
-  //       //     console.log(typeof d);
-  //       //   }
-  //       // })
-  //       this.getBase64(gotCSV, result => {
-  //         idCardBase64 = result;
-  //       })
-  //     );
-  //   }
-
-  //   //  else {
-  //   //   toaster.danger(this.state.platformMessage.errorMessage);
-  //   // }
-  // };
-
   milisToMinutesAndSeconds = mil => {
     let minutes = Math.floor(mil / 60000);
     let seconds = ((mil % 60000) / 1000).toFixed(0);
@@ -239,28 +189,29 @@ class Editor extends Component {
     return (
       <Grid container>
         {this.state.goCoreography === false &&
-          <div>
-            <Grid item lg={3} md={12} xl={9} xs={12} />
-            <Grid item lg={3} md={6} xl={6} xs={6}>
-              <Card>
-                <CardHeader>
-                  <Typography variant="h5"> Cihazınıza isim veriniz.</Typography>
-                </CardHeader>
-                <CardContent>
-                  <TextField onChange={e => this.addOdaName(e)}
-                    id="standard-search"
-                    label="Cihazınıza isim veriniz."
-                    type="search" />
-                </CardContent>
-                <CardActions>
-                  <Button onClick={this.onClickAddOdaName} variant="contained" color="primary">
-                    Kaydet
+          <Box
+            display="flex"
+            justifyContent="center"
+            alignItems="center"
+            minHeight="100vh"
+          >
+            <Card>
+              <CardHeader>
+                <Typography variant="h5"> Cihazınıza isim veriniz.</Typography>
+              </CardHeader>
+              <CardContent>
+                <TextField onChange={e => this.addOdaName(e)}
+                  id="standard-search"
+                  label="Cihazınıza isim veriniz."
+                  type="search" />
+              </CardContent>
+              <CardActions style={{ justifyContent: 'flex-end' }}>
+                <Button onClick={this.onClickAddOdaName} variant="contained" color="primary">
+                  Kaydet
                 </Button>
-                </CardActions>
-              </Card>
-            </Grid>
-            <Grid item lg={3} md={12} xl={9} xs={12} />
-          </div>
+              </CardActions>
+            </Card>
+          </Box>
         }
         {this.state.goCoreography && timeOfSum &&
           <div>

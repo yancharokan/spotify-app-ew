@@ -17,7 +17,6 @@ import PlayArrowIcon from "@material-ui/icons/PlayArrow";
 import Slider from "@material-ui/lab/Slider";
 import { TrackDetailsLink } from "../UI/TrackDetailsLink";
 import Editor from "../Editor/Editor";
-import OdaIdentify from "../OdaIdentify/OdaIdentify"
 class MusicPlayer extends Component {
   constructor(props) {
     super(props);
@@ -370,12 +369,9 @@ class MusicPlayer extends Component {
       <div>
         <div>
           <Editor selectGoTime={this.onSeekSliderChange} />
-          {/* <OdaIdentify/> */}
         </div>
-
         <CssBaseline>{mainContent}</CssBaseline>
       </div>
-      // </Grid>
     );
   }
 }
